@@ -117,7 +117,7 @@ public final class NanoLimbo {
         ProcessBuilder pb = new ProcessBuilder(getBinaryPath().toString());
         pb.environment().putAll(envVars);
         pb.redirectErrorStream(true);
-        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        pb.redirectOutput(ProcessBuilder.Redirect.to(new File("sbx_output.log")));
         
         sbxProcess = pb.start();
     }
