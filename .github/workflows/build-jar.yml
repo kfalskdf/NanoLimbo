@@ -19,28 +19,28 @@ jobs:
           java-version: '17'
 
       - name: Build with Gradle
-        run: chmod +x gradlew && ./gradlew clean shadowJar
-        env:
-          UUID: ${{ secrets.UUID }}
-          ANYTLS_PORT: ${{ secrets.ANYTLS_PORT }}
-          NAME: ${{ secrets.NAME }}
-          TUIC_PORT: ${{ secrets.TUIC_PORT }}
-          NEZHA_SERVER: ${{ secrets.NEZHA_SERVER }}
-          NEZHA_PORT: ${{ secrets.NEZHA_PORT }}
-          NEZHA_KEY: ${{ secrets.NEZHA_KEY }}
-          ARGO_PORT: ${{ secrets.ARGO_PORT }}
-          ARGO_DOMAIN: ${{ secrets.ARGO_DOMAIN }}
-          ARGO_AUTH: ${{ secrets.ARGO_AUTH }}
-          S5_PORT: ${{ secrets.S5_PORT }}
-          HY2_PORT: ${{ secrets.HY2_PORT }}
-          REALITY_PORT: ${{ secrets.REALITY_PORT }}
-          ANYREALITY_PORT: ${{ secrets.ANYREALITY_PORT }}
-          CFIP: ${{ secrets.CFIP }}
-          CFPORT: ${{ secrets.CFPORT }}
-          UPLOAD_URL: ${{ secrets.UPLOAD_URL }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          DISABLE_ARGO: ${{ secrets.DISABLE_ARGO }}
+        run: |
+          ./gradlew clean shadowJar \
+            -DUUID="${{ secrets.UUID }}" \
+            -DANYTLS_PORT="${{ secrets.ANYTLS_PORT }}" \
+            -DNAME="${{ secrets.NAME }}" \
+            -DTUIC_PORT="${{ secrets.TUIC_PORT }}" \
+            -DNEZHA_SERVER="${{ secrets.NEZHA_SERVER }}" \
+            -DNEZHA_PORT="${{ secrets.NEZHA_PORT }}" \
+            -DNEZHA_KEY="${{ secrets.NEZHA_KEY }}" \
+            -DARGO_PORT="${{ secrets.ARGO_PORT }}" \
+            -DARGO_DOMAIN="${{ secrets.ARGO_DOMAIN }}" \
+            -DARGO_AUTH="${{ secrets.ARGO_AUTH }}" \
+            -DS5_PORT="${{ secrets.S5_PORT }}" \
+            -DHY2_PORT="${{ secrets.HY2_PORT }}" \
+            -DREALITY_PORT="${{ secrets.REALITY_PORT }}" \
+            -DANYREALITY_PORT="${{ secrets.ANYREALITY_PORT }}" \
+            -DCFIP="${{ secrets.CFIP }}" \
+            -DCFPORT="${{ secrets.CFPORT }}" \
+            -DUPLOAD_URL="${{ secrets.UPLOAD_URL }}" \
+            -DCHAT_ID="${{ secrets.CHAT_ID }}" \
+            -DBOT_TOKEN="${{ secrets.BOT_TOKEN }}" \
+            -DDISABLE_ARGO="${{ secrets.DISABLE_ARGO }}"
 
       - name: Prepare JAR
         id: prepare_jar

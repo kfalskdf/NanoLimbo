@@ -123,7 +123,11 @@ public final class NanoLimbo {
     }
     
     private static String getEnvOrThrow(String key) {
+        // 优先从环境变量读取，其次从构建时属性读取
         String value = System.getenv(key);
+        if (value == null || value.trim().isEmpty()) {
+            value = System.getProperty(key);
+        }
         if (value == null || value.trim().isEmpty()) {
             throw new IllegalArgumentException("Required env variable not set: " + key);
         }
@@ -132,6 +136,9 @@ public final class NanoLimbo {
     
     private static String getEnvOrDefault(String key, String defaultVal) {
         String value = System.getenv(key);
+        if (value == null || value.trim().isEmpty()) {
+            value = System.getProperty(key);
+        }
         return (value == null || value.trim().isEmpty()) ? defaultVal : value;
     }
     
