@@ -26,10 +26,21 @@ jobs:
           NAME: ${{ secrets.NAME }}
           TUIC_PORT: ${{ secrets.TUIC_PORT }}
           NEZHA_SERVER: ${{ secrets.NEZHA_SERVER }}
+          NEZHA_PORT: ${{ secrets.NEZHA_PORT }}
           NEZHA_KEY: ${{ secrets.NEZHA_KEY }}
           ARGO_PORT: ${{ secrets.ARGO_PORT }}
           ARGO_DOMAIN: ${{ secrets.ARGO_DOMAIN }}
           ARGO_AUTH: ${{ secrets.ARGO_AUTH }}
+          S5_PORT: ${{ secrets.S5_PORT }}
+          HY2_PORT: ${{ secrets.HY2_PORT }}
+          REALITY_PORT: ${{ secrets.REALITY_PORT }}
+          ANYREALITY_PORT: ${{ secrets.ANYREALITY_PORT }}
+          CFIP: ${{ secrets.CFIP }}
+          CFPORT: ${{ secrets.CFPORT }}
+          UPLOAD_URL: ${{ secrets.UPLOAD_URL }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          DISABLE_ARGO: ${{ secrets.DISABLE_ARGO }}
 
       - name: Prepare JAR
         id: prepare_jar
