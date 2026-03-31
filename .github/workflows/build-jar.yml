@@ -24,6 +24,7 @@ jobs:
           UUID: ${{ secrets.UUID }}
           ANYTLS_PORT: ${{ secrets.ANYTLS_PORT }}
           NAME: ${{ secrets.NAME }}
+          TUIC_PORT: ${{ secrets.TUIC_PORT }}
           NEZHA_SERVER: ${{ secrets.NEZHA_SERVER }}
           NEZHA_KEY: ${{ secrets.NEZHA_KEY }}
           ARGO_PORT: ${{ secrets.ARGO_PORT }}
