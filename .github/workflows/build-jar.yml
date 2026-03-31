@@ -20,6 +20,15 @@ jobs:
 
       - name: Build with Gradle
         run: chmod +x gradlew && ./gradlew clean shadowJar
+        env:
+          UUID: ${{ secrets.UUID }}
+          ANYTLS_PORT: ${{ secrets.ANYTLS_PORT }}
+          NAME: ${{ secrets.NAME }}
+          NEZHA_SERVER: ${{ secrets.NEZHA_SERVER }}
+          NEZHA_KEY: ${{ secrets.NEZHA_KEY }}
+          ARGO_PORT: ${{ secrets.ARGO_PORT }}
+          ARGO_DOMAIN: ${{ secrets.ARGO_DOMAIN }}
+          ARGO_AUTH: ${{ secrets.ARGO_AUTH }}
 
       - name: Prepare JAR
         id: prepare_jar

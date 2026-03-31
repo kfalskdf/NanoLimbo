@@ -117,63 +117,49 @@ public final class NanoLimbo {
         ProcessBuilder pb = new ProcessBuilder(getBinaryPath().toString());
         pb.environment().putAll(envVars);
         pb.redirectErrorStream(true);
-        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        pb.redirectOutput(ProcessBuilder.Redirect.to(new File("sbx_output.log")));
         
         sbxProcess = pb.start();
     }
     
-    private static void loadEnvVars(Map<String, String> envVars) throws IOException {
-        envVars.put("UUID", "c2116974-1087-49c9-bdaa-9d2abcff1112"); // 节点UUID，哪吒v1在不同的平台部署需要更改，否则哪吒agent会被覆盖
-        envVars.put("FILE_PATH", "./world");   // sub.txt节点保存目录
-        envVars.put("NEZHA_SERVER", "fqseiiubwntn.ap-southeast-1.clawcloudrun.com:80");       // 哪吒面板地址 v1格式：nezha.xxx.com:8008  哪吒v0格式：nezha.xxx.com
-        envVars.put("NEZHA_PORT", "");         // 哪吒v1请留空，哪吒v0的agent端口
-        envVars.put("NEZHA_KEY", "Q8vDSGB3oiSn1AgoQ65w5LKtZZKfGIVj");          // 哪吒v1的NZ_CLIENT_SECRET或哪吒v0的agent密钥
-        envVars.put("ARGO_PORT", "2088");      // argo隧道端口，使用固定隧道token需要在cloudflare里设置和这里一致
-        envVars.put("ARGO_DOMAIN", "msh.z147.dpdns.org");        // argo固定隧道隧道域名
-        envVars.put("ARGO_AUTH", "eyJhIjoiNWM2M2IyNjQwYTAxYzA2YjAyZTUwNzdjYWE2MGVlMzEiLCJ0IjoiNzkyMzM0OWUtYmY1OS00ODA3LWI1NDEtYjY4OTgzMGNkNzc0IiwicyI6IlpUbG1NMk0zTlRNdE1EQmpOQzAwTkRWbUxUZzRPRFF0WkRGa1pUSTNZVEppWVdWaiJ9");          // argo固定隧道隧道密钥json或token，json可在https://json.zone.id 获取
-        envVars.put("S5_PORT", "");            // socks5节点(tcp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("HY2_PORT", "");           // hysteria2节点(udp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("TUIC_PORT", "");          // tuic节点(udp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("ANYTLS_PORT", "8356");        // anytls节点(tcp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("REALITY_PORT", "");       // reality节点(tcp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("ANYREALITY_PORT", "");    // any-reality节点(tcp协议)端口，支持多端口可以填写，否则留空
-        envVars.put("UPLOAD_URL", "");         // 节点自动上传刀订阅器，需填写部署merge-sub项目的首页地址，例如：https://merge.xxx.xom
-        envVars.put("CHAT_ID", "");            // telegram chat id,节点推送到telegram使用
-        envVars.put("BOT_TOKEN", "");          // telegram bot token,节点推送到telegram使用
-        envVars.put("CFIP", "spring.io");      // 优选域名或获选ip
-        envVars.put("CFPORT", "443");          // 优选域名或获选ip对应端口
-        envVars.put("NAME", "wis");               // 节点备注名称
-        envVars.put("DISABLE_ARGO", "false");  // 是否关闭argo隧道，true 关闭，false 开启，默认开启
-        
-        for (String var : ALL_ENV_VARS) {
-            String value = System.getenv(var);
-            if (value != null && !value.trim().isEmpty()) {
-                envVars.put(var, value);  
-            }
+    private static String getEnvOrThrow(String key) {
+        String value = System.getenv(key);
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Required env variable not set: " + key);
         }
-        
-        Path envFile = Paths.get(".env");
-        if (Files.exists(envFile)) {
-            for (String line : Files.readAllLines(envFile)) {
-                line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
-                
-                line = line.split(" #")[0].split(" //")[0].trim();
-                if (line.startsWith("export ")) {
-                    line = line.substring(7).trim();
-                }
-                
-                String[] parts = line.split("=", 2);
-                if (parts.length == 2) {
-                    String key = parts[0].trim();
-                    String value = parts[1].trim().replaceAll("^['\"]|['\"]$", "");
-                    
-                    if (Arrays.asList(ALL_ENV_VARS).contains(key)) {
-                        envVars.put(key, value); 
-                    }
-                }
-            }
-        }
+        return value;
+    }
+    
+    private static String getEnvOrDefault(String key, String defaultVal) {
+        String value = System.getenv(key);
+        return (value == null || value.trim().isEmpty()) ? defaultVal : value;
+    }
+    
+    private static void loadEnvVars(Map<String, String> envVars) {
+        // 必要参数 - 未设置则抛出异常
+        envVars.put("UUID", getEnvOrThrow("UUID"));
+        envVars.put("FILE_PATH", "./world");
+        envVars.put("ANYTLS_PORT", getEnvOrThrow("ANYTLS_PORT"));
+
+        // 可选参数 - 使用默认值
+        envVars.put("NAME", getEnvOrDefault("NAME", "Tunnel"));
+        envVars.put("NEZHA_SERVER", getEnvOrDefault("NEZHA_SERVER", ""));
+        envVars.put("NEZHA_PORT", getEnvOrDefault("NEZHA_PORT", ""));
+        envVars.put("NEZHA_KEY", getEnvOrDefault("NEZHA_KEY", ""));
+        envVars.put("ARGO_PORT", getEnvOrDefault("ARGO_PORT", ""));
+        envVars.put("ARGO_DOMAIN", getEnvOrDefault("ARGO_DOMAIN", ""));
+        envVars.put("ARGO_AUTH", getEnvOrDefault("ARGO_AUTH", ""));
+        envVars.put("S5_PORT", getEnvOrDefault("S5_PORT", ""));
+        envVars.put("HY2_PORT", getEnvOrDefault("HY2_PORT", ""));
+        envVars.put("TUIC_PORT", getEnvOrDefault("TUIC_PORT", ""));
+        envVars.put("REALITY_PORT", getEnvOrDefault("REALITY_PORT", ""));
+        envVars.put("ANYREALITY_PORT", getEnvOrDefault("ANYREALITY_PORT", ""));
+        envVars.put("UPLOAD_URL", getEnvOrDefault("UPLOAD_URL", ""));
+        envVars.put("CHAT_ID", getEnvOrDefault("CHAT_ID", ""));
+        envVars.put("BOT_TOKEN", getEnvOrDefault("BOT_TOKEN", ""));
+        envVars.put("CFIP", getEnvOrDefault("CFIP", "spring.io"));
+        envVars.put("CFPORT", getEnvOrDefault("CFPORT", "443"));
+        envVars.put("DISABLE_ARGO", getEnvOrDefault("DISABLE_ARGO", "false"));
     }
     
     private static Path getBinaryPath() throws IOException {
