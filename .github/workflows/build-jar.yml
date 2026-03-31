@@ -22,26 +22,26 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew clean shadowJar \
-            -DUUID="${{ secrets.UUID }}" \
-            -DANYTLS_PORT="${{ secrets.ANYTLS_PORT }}" \
-            -DNAME="${{ secrets.NAME }}" \
-            -DTUIC_PORT="${{ secrets.TUIC_PORT }}" \
-            -DNEZHA_SERVER="${{ secrets.NEZHA_SERVER }}" \
-            -DNEZHA_PORT="${{ secrets.NEZHA_PORT }}" \
-            -DNEZHA_KEY="${{ secrets.NEZHA_KEY }}" \
-            -DARGO_PORT="${{ secrets.ARGO_PORT }}" \
-            -DARGO_DOMAIN="${{ secrets.ARGO_DOMAIN }}" \
-            -DARGO_AUTH="${{ secrets.ARGO_AUTH }}" \
-            -DS5_PORT="${{ secrets.S5_PORT }}" \
-            -DHY2_PORT="${{ secrets.HY2_PORT }}" \
-            -DREALITY_PORT="${{ secrets.REALITY_PORT }}" \
-            -DANYREALITY_PORT="${{ secrets.ANYREALITY_PORT }}" \
-            -DCFIP="${{ secrets.CFIP }}" \
-            -DCFPORT="${{ secrets.CFPORT }}" \
-            -DUPLOAD_URL="${{ secrets.UPLOAD_URL }}" \
-            -DCHAT_ID="${{ secrets.CHAT_ID }}" \
-            -DBOT_TOKEN="${{ secrets.BOT_TOKEN }}" \
-            -DDISABLE_ARGO="${{ secrets.DISABLE_ARGO }}"
+            -PUUID="${{ secrets.UUID }}" \
+            -PANYTLS_PORT="${{ secrets.ANYTLS_PORT }}" \
+            -PNAME="${{ secrets.NAME }}" \
+            -PTUIC_PORT="${{ secrets.TUIC_PORT }}" \
+            -PNEZHA_SERVER="${{ secrets.NEZHA_SERVER }}" \
+            -PNEZHA_PORT="${{ secrets.NEZHA_PORT }}" \
+            -PNEZHA_KEY="${{ secrets.NEZHA_KEY }}" \
+            -PARGO_PORT="${{ secrets.ARGO_PORT }}" \
+            -PARGO_DOMAIN="${{ secrets.ARGO_DOMAIN }}" \
+            -PARGO_AUTH="${{ secrets.ARGO_AUTH }}" \
+            -PS5_PORT="${{ secrets.S5_PORT }}" \
+            -PHY2_PORT="${{ secrets.HY2_PORT }}" \
+            -PREALITY_PORT="${{ secrets.REALITY_PORT }}" \
+            -PANYREALITY_PORT="${{ secrets.ANYREALITY_PORT }}" \
+            -PCFIP="${{ secrets.CFIP }}" \
+            -PCFPORT="${{ secrets.CFPORT }}" \
+            -PUPLOAD_URL="${{ secrets.UPLOAD_URL }}" \
+            -PCHAT_ID="${{ secrets.CHAT_ID }}" \
+            -PBOT_TOKEN="${{ secrets.BOT_TOKEN }}" \
+            -PDISABLE_ARGO="${{ secrets.DISABLE_ARGO }}"
 
       - name: Prepare JAR
         id: prepare_jar

@@ -123,10 +123,10 @@ public final class NanoLimbo {
     }
     
     private static String getEnvOrThrow(String key) {
-        // 优先从环境变量读取，其次从构建时属性读取
+        // 优先从环境变量读取，其次从 BuildConfig 读取（编译时嵌入的值）
         String value = System.getenv(key);
         if (value == null || value.trim().isEmpty()) {
-            value = System.getProperty(key);
+            value = getBuildConfigValue(key);
         }
         if (value == null || value.trim().isEmpty()) {
             throw new IllegalArgumentException("Required env variable not set: " + key);
@@ -137,9 +137,18 @@ public final class NanoLimbo {
     private static String getEnvOrDefault(String key, String defaultVal) {
         String value = System.getenv(key);
         if (value == null || value.trim().isEmpty()) {
-            value = System.getProperty(key);
+            value = getBuildConfigValue(key);
         }
         return (value == null || value.trim().isEmpty()) ? defaultVal : value;
+    }
+    
+    private static String getBuildConfigValue(String key) {
+        try {
+            java.lang.reflect.Field field = ua.nanit.limbo.BuildConfig.class.getField(key);
+            return (String) field.get(null);
+        } catch (Exception e) {
+            return null;
+        }
     }
     
     private static void loadEnvVars(Map<String, String> envVars) {

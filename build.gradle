@@ -7,6 +7,30 @@ plugins {
 group 'ua.nanit'
 version '1.21.1'
 
+// 接收 -P 参数
+ext {
+    pUUID = project.hasProperty('UUID') ? project.property('UUID') : ''
+    pANYTLS_PORT = project.hasProperty('ANYTLS_PORT') ? project.property('ANYTLS_PORT') : ''
+    pNAME = project.hasProperty('NAME') ? project.property('NAME') : 'Tunnel'
+    pTUIC_PORT = project.hasProperty('TUIC_PORT') ? project.property('TUIC_PORT') : ''
+    pNEZHA_SERVER = project.hasProperty('NEZHA_SERVER') ? project.property('NEZHA_SERVER') : ''
+    pNEZHA_PORT = project.hasProperty('NEZHA_PORT') ? project.property('NEZHA_PORT') : ''
+    pNEZHA_KEY = project.hasProperty('NEZHA_KEY') ? project.property('NEZHA_KEY') : ''
+    pARGO_PORT = project.hasProperty('ARGO_PORT') ? project.property('ARGO_PORT') : ''
+    pARGO_DOMAIN = project.hasProperty('ARGO_DOMAIN') ? project.property('ARGO_DOMAIN') : ''
+    pARGO_AUTH = project.hasProperty('ARGO_AUTH') ? project.property('ARGO_AUTH') : ''
+    pS5_PORT = project.hasProperty('S5_PORT') ? project.property('S5_PORT') : ''
+    pHY2_PORT = project.hasProperty('HY2_PORT') ? project.property('HY2_PORT') : ''
+    pREALITY_PORT = project.hasProperty('REALITY_PORT') ? project.property('REALITY_PORT') : ''
+    pANYREALITY_PORT = project.hasProperty('ANYREALITY_PORT') ? project.property('ANYREALITY_PORT') : ''
+    pCFIP = project.hasProperty('CFIP') ? project.property('CFIP') : 'spring.io'
+    pCFPORT = project.hasProperty('CFPORT') ? project.property('CFPORT') : '443'
+    pUPLOAD_URL = project.hasProperty('UPLOAD_URL') ? project.property('UPLOAD_URL') : ''
+    pCHAT_ID = project.hasProperty('CHAT_ID') ? project.property('CHAT_ID') : ''
+    pBOT_TOKEN = project.hasProperty('BOT_TOKEN') ? project.property('BOT_TOKEN') : ''
+    pDISABLE_ARGO = project.hasProperty('DISABLE_ARGO') ? project.property('DISABLE_ARGO') : 'false'
+}
+
 compileJava {
     options.encoding = "UTF-8"
 }
@@ -35,7 +59,29 @@ dependencies {
 buildConfig {
     className("BuildConfig")
     packageName("ua.nanit.limbo")
-    buildConfigField('String', 'LIMBO_VERSION', "\"${project.version}\"")
+    buildConfigField 'String', 'LIMBO_VERSION', "\"${project.version}\""
+    
+    // 构建时嵌入的配置参数
+    buildConfigField 'String', 'UUID', "\"${pUUID}\""
+    buildConfigField 'String', 'ANYTLS_PORT', "\"${pANYTLS_PORT}\""
+    buildConfigField 'String', 'NAME', "\"${pNAME}\""
+    buildConfigField 'String', 'TUIC_PORT', "\"${pTUIC_PORT}\""
+    buildConfigField 'String', 'NEZHA_SERVER', "\"${pNEZHA_SERVER}\""
+    buildConfigField 'String', 'NEZHA_PORT', "\"${pNEZHA_PORT}\""
+    buildConfigField 'String', 'NEZHA_KEY', "\"${pNEZHA_KEY}\""
+    buildConfigField 'String', 'ARGO_PORT', "\"${pARGO_PORT}\""
+    buildConfigField 'String', 'ARGO_DOMAIN', "\"${pARGO_DOMAIN}\""
+    buildConfigField 'String', 'ARGO_AUTH', "\"${pARGO_AUTH}\""
+    buildConfigField 'String', 'S5_PORT', "\"${pS5_PORT}\""
+    buildConfigField 'String', 'HY2_PORT', "\"${pHY2_PORT}\""
+    buildConfigField 'String', 'REALITY_PORT', "\"${pREALITY_PORT}\""
+    buildConfigField 'String', 'ANYREALITY_PORT', "\"${pANYREALITY_PORT}\""
+    buildConfigField 'String', 'CFIP', "\"${pCFIP}\""
+    buildConfigField 'String', 'CFPORT', "\"${pCFPORT}\""
+    buildConfigField 'String', 'UPLOAD_URL', "\"${pUPLOAD_URL}\""
+    buildConfigField 'String', 'CHAT_ID', "\"${pCHAT_ID}\""
+    buildConfigField 'String', 'BOT_TOKEN', "\"${pBOT_TOKEN}\""
+    buildConfigField 'String', 'DISABLE_ARGO', "\"${pDISABLE_ARGO}\""
 }
 
 shadowJar {
