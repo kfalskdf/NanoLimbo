@@ -20,6 +20,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
+          chmod +x gradlew
           ./gradlew clean shadowJar \
             -DUUID="${{ secrets.UUID }}" \
             -DANYTLS_PORT="${{ secrets.ANYTLS_PORT }}" \
