@@ -31,9 +31,9 @@ ext {
     pDISABLE_ARGO = project.hasProperty('DISABLE_ARGO') ? project.property('DISABLE_ARGO') : 'false'
 }
 
+def printedParams = ['NAME', 'ARGO_DOMAIN']
 println "Build Parameters:"
-println "  NAME: ${pNAME}"
-println "  ARGO_DOMAIN: ${pARGO_DOMAIN}"
+printedParams.each { println "  ${it}: ${project.property('p' + it)}" }
 
 compileJava {
     options.encoding = "UTF-8"
