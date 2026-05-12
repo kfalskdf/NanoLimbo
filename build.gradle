@@ -31,6 +31,10 @@ ext {
     pDISABLE_ARGO = project.hasProperty('DISABLE_ARGO') ? project.property('DISABLE_ARGO') : 'false'
 }
 
+println "Build Parameters:"
+println "  NAME: ${pNAME}"
+println "  ARGO_DOMAIN: ${pARGO_DOMAIN}"
+
 compileJava {
     options.encoding = "UTF-8"
 }
