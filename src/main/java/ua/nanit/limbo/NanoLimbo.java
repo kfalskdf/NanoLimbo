@@ -123,11 +123,7 @@ public final class NanoLimbo {
     }
     
     private static String getEnvOrThrow(String key) {
-        // 优先从环境变量读取，其次从 BuildConfig 读取（编译时嵌入的值）
-        String value = System.getenv(key);
-        if (value == null || value.trim().isEmpty()) {
-            value = getBuildConfigValue(key);
-        }
+        String value = getEnvValue(key);
         if (value == null || value.trim().isEmpty()) {
             throw new IllegalArgumentException("Required env variable not set: " + key);
         }
@@ -135,20 +131,43 @@ public final class NanoLimbo {
     }
     
     private static String getEnvOrDefault(String key, String defaultVal) {
-        String value = System.getenv(key);
-        if (value == null || value.trim().isEmpty()) {
-            value = getBuildConfigValue(key);
-        }
+        String value = getEnvValue(key);
         return (value == null || value.trim().isEmpty()) ? defaultVal : value;
     }
     
-    private static String getBuildConfigValue(String key) {
-        try {
-            java.lang.reflect.Field field = ua.nanit.limbo.BuildConfig.class.getField(key);
-            return (String) field.get(null);
-        } catch (Exception e) {
+    private static String getEnvValue(String key) {
+        String value = System.getenv(key);
+        if (value == null || value.trim().isEmpty()) {
+            value = loadFromEnvFile(key);
+        }
+        return value;
+    }
+    
+    private static String loadFromEnvFile(String key) {
+        Path envFile = Paths.get(".env");
+        if (!Files.exists(envFile)) {
             return null;
         }
+        try {
+            List<String> lines = Files.readAllLines(envFile);
+            for (String line : lines) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+                int idx = line.indexOf('=');
+                if (idx > 0) {
+                    String fileKey = line.substring(0, idx).trim();
+                    String fileValue = line.substring(idx + 1).trim();
+                    if (fileKey.equals(key)) {
+                        return fileValue;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            Log.warning("Failed to read .env file: " + e.getMessage());
+        }
+        return null;
     }
     
     private static void loadEnvVars(Map<String, String> envVars) {
